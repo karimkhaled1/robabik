@@ -24,30 +24,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class news extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        {
 
     private SectionPageAdapter sectionPageAdapter;
     private ViewPager mViewPager;
+    public static int pagePostion=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        NavigationView navigationView =  findViewById(R.id.nav_view);
+        mViewPager = findViewById(R.id.pager);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            }
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+            @Override
+            public void onPageSelected(int position) {
+             pagePostion=position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         sectionPageAdapter = new SectionPageAdapter(getSupportFragmentManager());
         sectionPageAdapter.addFragment(new SectionFragment(),"page 1");
-        sectionPageAdapter.addFragment(new del(),"page 2");
+        sectionPageAdapter.addFragment(new SectionFragment(),"page 2");
+        sectionPageAdapter.addFragment(new SectionFragment(),"page 3");
+        sectionPageAdapter.addFragment(new SectionFragment(),"page 4");
+
         mViewPager.setAdapter(sectionPageAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -72,30 +88,7 @@ public class news extends AppCompatActivity
 
 
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     public class SectionPageAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mfragmentList = new ArrayList<>();
@@ -117,15 +110,21 @@ public class news extends AppCompatActivity
             if (position == 0) {
                 return new SectionFragment();
             } else if (position == 1) {
-                return new del();
+                return new SectionFragment();
             }
+            else if (position == 2) {
+                return new SectionFragment();
+            }
+            else if (position == 3) {
+                return new SectionFragment();
+            }
+
             return null;
         }
-
         // This determines the number of tabs
         @Override
         public int getCount() {
-            return 2;
+            return 4;
         }
 
         // This determines the title for each tab
@@ -134,9 +133,13 @@ public class news extends AppCompatActivity
             // Generate title based on item position
             switch (position) {
                 case 0:
-                    return "Technology";
+                    return "entertainment general";
                 case 1:
-                    return "Machine learning";
+                    return "health";
+                case 2:
+                    return "technology";
+                case 3:
+                    return "sports";
 
 
             }
