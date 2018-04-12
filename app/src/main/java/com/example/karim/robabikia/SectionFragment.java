@@ -95,7 +95,7 @@ public class SectionFragment extends Fragment {
     }
 
     private void parseJson(JSONObject response) throws JSONException {
-        Log.e("wlaa",response.toString());
+        Log.e("tmam",response.toString());
         JSONArray jsonArray = response.getJSONArray("articles");
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);

@@ -39,7 +39,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.title.setText(posts.get(position).getTitle());
         holder.date.setText(posts.get(position).getData());
-        //Picasso.get().load(posts.get(position).getUrlToImage()).into(holder.imageView);
+        Picasso.get().load(posts.get(position).getUrlToImage()).into(holder.imageView);
         Log.e("bla",posts.get(position).getTitle());
     }
 
