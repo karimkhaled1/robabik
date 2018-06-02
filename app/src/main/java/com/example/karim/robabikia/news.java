@@ -1,5 +1,6 @@
 package com.example.karim.robabikia;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,12 +30,14 @@ public class news extends AppCompatActivity
 
     private SectionPageAdapter sectionPageAdapter;
     private ViewPager mViewPager;
-    public static int pagePostion=0;
+    static int index;
+         private static TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
         Toolbar toolbar =  findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Color.BLUE);
         setSupportActionBar(toolbar);
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -42,31 +46,41 @@ public class news extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView =  findViewById(R.id.nav_view);
         mViewPager = findViewById(R.id.pager);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-             pagePostion=position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
         sectionPageAdapter = new SectionPageAdapter(getSupportFragmentManager());
         sectionPageAdapter.addFragment(new SectionFragment(),"page 1");
         sectionPageAdapter.addFragment(new SectionFragment(),"page 2");
         sectionPageAdapter.addFragment(new SectionFragment(),"page 3");
         sectionPageAdapter.addFragment(new SectionFragment(),"page 4");
-
         mViewPager.setAdapter(sectionPageAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+         tabLayout = findViewById(R.id.sliding_tabs);
+
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.getTabAt(0).setText("science");
+        tabLayout.getTabAt(1).setText("business");
+        tabLayout.getTabAt(2).setText("technology");
+        tabLayout.getTabAt(3).setText("sports");
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            tabLayout.getTabAt(i).setIcon(R.drawable.ic_menu_camera);
+        }
+
+        tabLayout.setBackgroundColor(Color.rgb(118,60,77        ));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                index=tab.getPosition();
+                Log.e("ssa",index+"");
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override
@@ -94,56 +108,22 @@ public class news extends AppCompatActivity
         private final List<Fragment> mfragmentList = new ArrayList<>();
         private final List<String> mfragmentListtitle = new ArrayList<>();
 
+        public SectionPageAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
 
         public void addFragment(Fragment fragment, String s) {
             mfragmentList.add(fragment);
             mfragmentListtitle.add(s);
         }
-
-        public SectionPageAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        // This determines the fragment for each tab
         @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                return new SectionFragment();
-            } else if (position == 1) {
-                return new SectionFragment();
-            }
-            else if (position == 2) {
-                return new SectionFragment();
-            }
-            else if (position == 3) {
-                return new SectionFragment();
-            }
-
-            return null;
-        }
-        // This determines the number of tabs
+        public Fragment getItem(int position) {return new SectionFragment();}
         @Override
         public int getCount() {
             return 4;
         }
 
         // This determines the title for each tab
-        @Override
-        public CharSequence getPageTitle(int position) {
-            // Generate title based on item position
-            switch (position) {
-                case 0:
-                    return "entertainment general";
-                case 1:
-                    return "health";
-                case 2:
-                    return "technology";
-                case 3:
-                    return "sports";
-
-
-            }
-            return null;
-        }
     }
 }

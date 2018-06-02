@@ -28,16 +28,24 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class SectionFragment extends Fragment {
+public class SectionFragment extends Fragment  {
 // api key 2b211dc3274a4dfa96eb88676ca7830c
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adapter = new RecycleViewAdapter(getContext(), posts);
+
     }
 
-    ArrayList<Post> posts = new ArrayList<>();
-    RecycleViewAdapter adapter;
+    @Override
+    public void onStart() {
+        super.onStart();
+        getData();
+    }
+
+    private  ArrayList<Post> posts = new ArrayList<>();
+     RecycleViewAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,15 +53,12 @@ public class SectionFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_section, container, false);
         RecyclerView recyclerView = v.findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getData();
-        posts.add(new Post("sdfsdaf","Sdfasdf","Sdfasdf","Asdfasdf"));
-         adapter = new RecycleViewAdapter(getContext(), posts);
         recyclerView.setAdapter(adapter);
         return v;
     }
 
     private void getData() {
-        String url = "https://newsapi.org/v2/top-headlines?category="+getCatgory()+"&apiKey=2b211dc3274a4dfa96eb88676ca7830c";
+        String url = "https://newsapi.org/v2/top-headlines?category="+getCatgory()+"&country=us&apiKey=2b211dc3274a4dfa96eb88676ca7830c";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -70,7 +75,6 @@ public class SectionFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                       Log.e("wlaa","failed");
                     }
                 });
 
@@ -79,31 +83,32 @@ public class SectionFragment extends Fragment {
     }
 
     private String getCatgory() {
-        if (news.pagePostion==0){
-            return "entertainment general";
+       int index= news.index;
+       Log.e("bbba",index+"");
+        if (index==0){
+            return "science";
         }
-        if (news.pagePostion==1){
-            return "health";
+        if (index==1){
+            return "business";
         }
-        if (news.pagePostion==2){
+        if (index==2){
             return "technology";
         }
-        if (news.pagePostion==3){
+        if (index==3){
             return "sports";
         }
         return null;
     }
 
     private void parseJson(JSONObject response) throws JSONException {
-        Log.e("tmam",response.toString());
         JSONArray jsonArray = response.getJSONArray("articles");
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
              posts.add(new Post(jsonObject.getString("title"),jsonObject.getString("description"),jsonObject.getString("publishedAt"),jsonObject.getString("urlToImage")));
-            Log.e("wlaaa", "Response: " + jsonObject.getString("title"));
         }
         adapter.notifyDataSetChanged();
     }
+
 
 }
 
